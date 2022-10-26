@@ -55,6 +55,32 @@ const gregorianConfigs = {
   timeSelect: 'Select',
   timeClose: 'Close',
 };
+const thConfigs = {
+  dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์'],
+  dayNamesShort: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+  monthNames: [
+    'มกราคม',
+    'กุมภาพันธ์',
+    'มีนาคม',
+    'เมษายน',
+    'พฤษภาคม',
+    'มิถุนายน',
+    'กรกฎาคม',
+    'สิงหาคม',
+    'กันยายน',
+    'ตุลาคม',
+    'พฤศจิกายน',
+    'เฉลี่ยรายปี',
+  ],
+  selectedFormat: 'YYYY/MM/DD',
+  dateFormat: 'YYYY/MM/DD',
+  monthYearFormat: 'YYYY MM',
+  timeFormat: 'HH:mm',
+  hour: 'Hour',
+  minute: 'Minute',
+  timeSelect: 'Select',
+  timeClose: 'Close',
+};
 
 class utils {
   constructor({minimumDate, maximumDate, isGregorian, mode, reverse, configs}) {
@@ -64,7 +90,7 @@ class utils {
       isGregorian,
       reverse: reverse === 'unset' ? !isGregorian : reverse,
     };
-    this.config = isGregorian ? gregorianConfigs : jalaaliConfigs;
+    this.config = thConfigs;
     this.config = {...this.config, ...configs};
     if (mode === 'time' || mode === 'datepicker') {
       this.config.selectedFormat = this.config.dateFormat + ' ' + this.config.timeFormat;
@@ -104,7 +130,7 @@ class utils {
   getMonthYearText = (time) => {
     const {isGregorian} = this.data;
     const date = this.getDate(time);
-    const year = this.toPersianNumber(isGregorian ? date.year() : date.jYear());
+    const year = date.year() + 543
     const month = this.getMonthName(isGregorian ? date.month() : date.jMonth());
     return `${month} ${year}`;
   };
