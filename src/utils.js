@@ -130,9 +130,9 @@ class utils {
   getMonthYearText = (time) => {
     const {isGregorian} = this.data;
     const date = this.getDate(time);
-    const year = date.year() + 543
+    const year = this.toPersianNumber(isGregorian ? date.year() : date.jYear());
     const month = this.getMonthName(isGregorian ? date.month() : date.jMonth());
-    return `${month} ${year}`;
+    return `${month} ${Number(year) + 543}`;
   };
 
   checkMonthDisabled = (time) => {
