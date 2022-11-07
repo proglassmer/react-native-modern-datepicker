@@ -70,7 +70,7 @@ const thConfigs = {
     'กันยายน',
     'ตุลาคม',
     'พฤศจิกายน',
-    'เฉลี่ยรายปี',
+    'ธันวาคม',
   ],
   selectedFormat: 'YYYY/MM/DD',
   dateFormat: 'YYYY/MM/DD',
