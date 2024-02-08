@@ -54,19 +54,21 @@ const SelectMonth = () => {
   const onSelectMonth = month => {
     if (show) {
       let y = Number(utils.toEnglish(year)) - 543;
-      const date = utils.getDate(utils.validYear(mainState.activeDate, y));
-      const activeDate =
-        month !== null ? (isGregorian ? date.month(month) : date.jMonth(month)) : date;
-      setMainState({
-        type: 'set',
-        activeDate: utils.getFormated(activeDate),
-      });
-      month !== null && onMonthYearChange(utils.getFormated(activeDate, 'monthYearFormat'));
-      month !== null &&
-        mode !== 'monthYear' &&
+      if (y > 0) {
+        const date = utils.getDate(utils.validYear(mainState.activeDate, y));
+        const activeDate =
+          month !== null ? (isGregorian ? date.month(month) : date.jMonth(month)) : date;
         setMainState({
-          type: 'toggleMonth',
+          type: 'set',
+          activeDate: utils.getFormated(activeDate),
         });
+        month !== null && onMonthYearChange(utils.getFormated(activeDate, 'monthYearFormat'));
+        month !== null &&
+          mode !== 'monthYear' &&
+          setMainState({
+            type: 'toggleMonth',
+          });
+      }
     }
   };
 
