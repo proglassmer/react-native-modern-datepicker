@@ -51,6 +51,22 @@ const SelectMonth = () => {
     show && setYear(utils.getMonthYearText(mainState.activeDate).split(' ')[1]);
   }, [mainState.activeDate, utils, show]);
 
+  useEffect(() => {
+    if (show) {
+      let y = Number(utils.toEnglish(year)) - 543;
+      if (y > 0) {
+        const date = utils.getDate(utils.validYear(mainState.activeDate, y));
+        const month = date.month()
+        const activeDate =
+            month !== null ? (isGregorian ? date.month(month) : date.jMonth(month)) : date;
+        setMainState({
+          type: 'set',
+          activeDate: utils.getFormated(activeDate),
+        });
+      }
+    }
+  }, [year]);
+
   const onSelectMonth = month => {
     if (show) {
       let y = Number(utils.toEnglish(year)) - 543;
