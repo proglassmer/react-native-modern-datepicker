@@ -1,9 +1,10 @@
 import React, {createContext, useReducer, useContext, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, SafeAreaView, Dimensions, ScrollView} from 'react-native';
 import PropTypes from 'prop-types';
 
 import {Calendar, SelectMonth, SelectTime} from './components';
 import {utils} from '../utils';
+import {boxTemplate} from '../../../../src/styles/BaseStyle';
 
 const options = {
   backgroundColor: '#fff',
@@ -19,6 +20,11 @@ const options = {
   textHeaderFontSize: 17,
   headerAnimationDistance: 100,
   daysAnimationDistance: 200,
+};
+
+const isPortrait = () => {
+  const dim = Dimensions.get('screen');
+  return dim.height >= dim.width;
 };
 
 const reducer = (state, action) => {
@@ -41,7 +47,7 @@ const useCalendar = () => {
   return contextValue;
 };
 
-const DatePicker = props => {
+const DatePicker = (props) => {
   const calendarUtils = new utils(props);
   const contextValue = {
     ...props,
@@ -57,7 +63,7 @@ const DatePicker = props => {
       timeOpen: props.mode === 'time',
     }),
   };
-  const [minHeight, setMinHeight] = useState(300);
+  const [minHeight, setMinHeight] = useState(200);
   const style = styles(contextValue.options);
 
   const renderBody = () => {
@@ -84,19 +90,57 @@ const DatePicker = props => {
         return <SelectTime />;
     }
   };
+  // console.log(Dimensions.get('window').height, )
+
+  const renderWrap = () => {
+    console.log('hihi', isPortrait());
+    if (isPortrait()) {
+      <View
+        style={[style.container, {minHeight}, props.style]}
+        onLayout={({nativeEvent}) => {
+          setMinHeight(nativeEvent.layout.width * 0.9 + 55);
+        }}>
+        {renderBody()}
+      </View>;
+    } else {
+      <ScrollView>
+        <View
+          style={[style.container, {minHeight}, props.style]}
+          onLayout={({nativeEvent}) => {
+            setMinHeight(nativeEvent.layout.width * 0.9 + 55);
+          }}>
+          {renderBody()}
+        </View>
+      </ScrollView>;
+    }
+  };
 
   return (
     <CalendarContext.Provider value={contextValue}>
-      <View
-        style={[style.container, {minHeight}, props.style]}
-        onLayout={({nativeEvent}) => setMinHeight(nativeEvent.layout.width * 0.9 + 55)}>
-        {renderBody()}
-      </View>
+      {isPortrait() ? (
+        <View
+          style={[style.container, {minHeight}, props.style]}
+          onLayout={({nativeEvent}) => {
+            setMinHeight(nativeEvent.layout.width * 0.9 + 55);
+          }}>
+          {renderBody()}
+        </View>
+      ) : (
+        <ScrollView>
+          <View
+            style={[style.container, {minHeight}, props.style]}
+            onLayout={({nativeEvent}) => {
+              setMinHeight(nativeEvent.layout.width * 0.9 + 55);
+            }}>
+            {renderBody()}
+          </View>
+        </ScrollView>
+      )}
     </CalendarContext.Provider>
   );
 };
 
-const styles = theme =>
+const styles = (theme) =>
   StyleSheet.create({
     container: {
       backgroundColor: theme.backgroundColor,
